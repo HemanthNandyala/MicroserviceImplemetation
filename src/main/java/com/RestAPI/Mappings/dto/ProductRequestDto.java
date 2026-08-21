@@ -9,6 +9,6 @@ public class ProductRequestDto {
 
     private String title;
     private String description;
-    private Double price;
-    private  String category;
+    private float price;
+    private String category;
 }

@@ -11,6 +11,6 @@ public class ProductResponseDto {
     private Integer id;
     private String title;
     private String description;
-    private Double price;
+    private float price;
     private  String category;
 }

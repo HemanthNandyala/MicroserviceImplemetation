@@ -2,6 +2,8 @@ package com.RestAPI.Mappings.Controller;
 
 import com.RestAPI.Mappings.Model.Product;
 import com.RestAPI.Mappings.Service.ProductService;
+import com.RestAPI.Mappings.dto.ProductRequestDto;
+import com.RestAPI.Mappings.dto.ProductResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +23,9 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public List<Product> getAllProducts()
+    public List<ProductResponseDto> getAllProducts()
     {
+
         return productService.getAllProducts();
     }
 
@@ -32,23 +35,23 @@ public class ProductController {
 //
 //    }
     @GetMapping("/products/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Integer id)
+    public ResponseEntity<ProductResponseDto> getProductById(@PathVariable Integer id)
     {
         return new ResponseEntity<> (productService.getProductById(id), HttpStatus.ACCEPTED); //We have to give body and status
       //  return ResponseEntity.ok(productService.getProductById(id)); //In Spring
     }
 
     @PostMapping("/products")
-    public ResponseEntity<Product> createProduct(@RequestBody Product product)
+    public ResponseEntity<ProductResponseDto> createProduct(@RequestBody ProductRequestDto productRequestDto)
     {
-        return new ResponseEntity<>(productService.createProduct(product),HttpStatus.CREATED);
+        return new ResponseEntity<>(productService.createProduct(productRequestDto),HttpStatus.CREATED);
     }
 
     @PutMapping("/products/{id}")
-    public ResponseEntity<Product> updateProduct(@RequestBody Product product , @PathVariable Integer id)
+    public ResponseEntity<ProductResponseDto> updateProduct(@RequestBody ProductRequestDto productRequestDto , @PathVariable Integer id)
     {
        // return ResponseEntity.status(200).body(productService.updateProduct(product,id));
-        productService.updateProduct(product,id);
+        productService.updateProduct(productRequestDto,id);
         //return ResponseEntity.ok().build();
         return ResponseEntity.noContent().build();
     }
