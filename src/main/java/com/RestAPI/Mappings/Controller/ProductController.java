@@ -37,7 +37,7 @@ public class ProductController {
     @GetMapping("/products/{id}")
     public ResponseEntity<ProductResponseDto> getProductById(@PathVariable Integer id)
     {
-        return new ResponseEntity<> (productService.getProductById(id), HttpStatus.ACCEPTED); //We have to give body and status
+        return new ResponseEntity<>(productService.getProductById(id), HttpStatus.OK); //We have to give body and status
       //  return ResponseEntity.ok(productService.getProductById(id)); //In Spring
     }
 
@@ -46,7 +46,7 @@ public class ProductController {
     {
         return new ResponseEntity<>(productService.createProduct(productRequestDto),HttpStatus.CREATED);
     }
-
+/* Commenting PutMapping- THis returns nothing
     @PutMapping("/products/{id}")
     public ResponseEntity<ProductResponseDto> updateProduct(@RequestBody ProductRequestDto productRequestDto , @PathVariable Integer id)
     {
@@ -54,12 +54,37 @@ public class ProductController {
         productService.updateProduct(productRequestDto,id);
         //return ResponseEntity.ok().build();
         return ResponseEntity.noContent().build();
+    } */
+
+    @PutMapping("/products/{id}")
+    public ResponseEntity<ProductResponseDto> updateProduct(@RequestBody ProductRequestDto productRequestDto , @PathVariable Integer id)
+    {
+        // return ResponseEntity.status(200).body(productService.updateProduct(product,id));
+        ProductResponseDto response = productService.updateProduct(productRequestDto,id);
+        //return ResponseEntity.ok().build();
+        return ResponseEntity.ok(response);
     }
 
+ /* Commenting controller
     @DeleteMapping("products/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Integer id)
     {
         productService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
+    } */
+
+    @DeleteMapping("/products/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Integer id)
+    {
+        productService.deleteProduct(id);
         return ResponseEntity.ok().build();
+    }
+
+
+    @PatchMapping("/products/{id}")
+    public ResponseEntity<ProductResponseDto> patchProduct(@RequestBody ProductRequestDto productRequestDto, @PathVariable Integer id)
+    {
+        ProductResponseDto resposne =  productService.patchUpdateProduct(productRequestDto, id);
+        return ResponseEntity.ok(resposne);
     }
 }

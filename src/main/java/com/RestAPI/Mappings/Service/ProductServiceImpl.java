@@ -3,6 +3,9 @@ package com.RestAPI.Mappings.Service;
 import com.RestAPI.Mappings.Model.Product;
 import com.RestAPI.Mappings.dto.ProductRequestDto;
 import com.RestAPI.Mappings.dto.ProductResponseDto;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -74,16 +77,51 @@ public class ProductServiceImpl implements ProductService {
         return mapToProductResponseDto(createdProduct);
     }
 
+    /* Commenting put - This retuens Void
     @Override
     public void updateProduct(ProductRequestDto productRequestDto, Integer id) {
        // restTemplate.put("https://fakestoreapi.com/products/{id}", product ,id);
         Product productToUpdate = mapToProduct(productRequestDto);
         restTemplate.put("https://fakestoreapi.com/products/{id}" , productToUpdate,id);
+    } */
+
+    // Put Mapping Using Exchange
+    @Override
+    public ProductResponseDto updateProduct(ProductRequestDto productRequestDto , Integer id)
+    {
+       Product productToUpdate =  mapToProduct(productRequestDto);
+       HttpEntity<Product> requestEntity = new HttpEntity<>(productToUpdate);
+       ResponseEntity<Product> response =  restTemplate.exchange("https://fakestoreapi.com/products/{id}",
+               HttpMethod.PUT,
+               requestEntity,
+               Product.class,
+               id );
+       Product  updatedProduct = response.getBody();
+       return mapToProductResponseDto(updatedProduct);
     }
 
+
+    /* Commenting Delete mapping without exchange - Nothing retuen
     @Override
     public void deleteProduct(Integer id) {
         restTemplate.delete("https://fakestoreapi.com/products/{id}" , id);
+    }*/
+
+    @Override
+    public ProductResponseDto patchUpdateProduct(ProductRequestDto dto, Integer id)
+    {
+       Product productToPatch = mapToProduct(dto);
+       HttpEntity<Product> requestEntity = new HttpEntity<>(productToPatch);
+       ResponseEntity<Product> response = restTemplate.exchange("https://fakestoreapi.com/products/{id}", HttpMethod.PATCH, requestEntity,Product.class, id);
+       Product patchedProduct = response.getBody();
+       return mapToProductResponseDto(patchedProduct);
+    }
+
+    //If you expect body then we can mention Product.class otherwise VOid.class is fine
+    @Override
+    public void deleteProduct(Integer id) {
+
+        restTemplate.exchange("https://fakestoreapi.com/products/{id}" , HttpMethod.DELETE,null, Void.class, id);
     }
 
 
