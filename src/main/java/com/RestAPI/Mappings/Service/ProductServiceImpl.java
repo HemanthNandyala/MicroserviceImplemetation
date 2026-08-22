@@ -3,6 +3,7 @@ package com.RestAPI.Mappings.Service;
 import com.RestAPI.Mappings.Model.Product;
 import com.RestAPI.Mappings.dto.ProductRequestDto;
 import com.RestAPI.Mappings.dto.ProductResponseDto;
+import com.RestAPI.Mappings.exception.ProductNotFoundException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -60,11 +61,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponseDto getProductById(Integer id) {
+    public ProductResponseDto getProductById(Integer id) throws ProductNotFoundException {
 
          String url = "https://fakestoreapi.com/products/" + id;
 
          Product product = restTemplate.getForObject(url, Product.class);
+         if(product == null)
+         {
+             throw new ProductNotFoundException("Product not found with id "+ id);
+         }
          return mapToProductResponseDto(product);
            // return restTemplate.getForObject("https://fakestoreapi.com/products/{id}" , Product.class);
 

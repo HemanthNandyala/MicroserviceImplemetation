@@ -1,6 +1,6 @@
 package com.RestAPI.Mappings.Service;
 
-import com.RestAPI.Mappings.Model.Product;
+
 import com.RestAPI.Mappings.dto.ProductRequestDto;
 import com.RestAPI.Mappings.dto.ProductResponseDto;
 
